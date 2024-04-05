@@ -1,0 +1,107 @@
+﻿@inject IConfiguration _config
+
+@{
+    ViewData["Title"] = @_config["Prompts:Title"];
+}
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+ .user-message {
+        text-align: right;
+        color: blue;
+ }
+ 
+ .ai-message {
+            text-align: left;
+            color: darkgreen;
+        }
+
+</style>
+<body>
+
+    
+        <p id="infoGroup">
+            <p id="pDescription">
+        <label id="promptVisitReason">@_config["Prompts:Description"]:</label> <input hidden type="text" id="Description" name="Description" placeholder="无" cols="150" rows="1" style="width:100%" />
+            <br />
+            </p>
+            <br />
+        <input type="button" id="btnUpdateInfo" value=@_config["Prompts:Update"] onclick="UpdateInfo()" />
+        </p>
+        <hr/>
+        <p hidden id="chatGroup">
+            <label id="transcriptText"><b>Transcript</b></label>
+            @if (_config["Language"] == "zh")
+            {
+                <button type="button" title="不满意？重新生成最后一轮对话" id="regenerateTurn" onclick="RegenerateTurn()">&#x27F3;</button>
+            }
+            else
+            {
+                <button type="button" title="Regenerate The Last Turn" id="regenerateTurn" onclick="RegenerateTurn()">&#x27F3;</button>
+            }
+            <br />
+            <img hidden id="dotdotdot" src="@Url.Content("~/images/dot.gif")" width="50" />
+            <br />
+            <label id="promptInputPatient">@_config["Prompts:TypeTurn"]</label>
+            <br />
+            <input type="text" id="inputTurn" name="inputTurn" cols="150" rows="1" style="width:100%" autofocus />
+            <br />
+            <input type="button" id="btnNextTurn" value=@_config["Prompts:Send"] onclick="SendTurn()" />
+        </p>
+        <hr />
+      
+        <script src="~/js/site.js"></script>
+        <script>
+
+            const txtTurnEl = document.getElementById('inputTurn');
+            const btnTurnEl = document.getElementById('btnNextTurn');
+            txtTurnEl.addEventListener('keydown', (event) => {
+              if (event.keyCode == 13) {
+                btnTurnEl.click();
+                txtTurnEl.value="";
+              }
+            });          
+        </script>
+    
+
+</body>

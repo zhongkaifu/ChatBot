@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Chatbot/bin
+/Chatbot/cuda_cache/general
+/Chatbot/obj
