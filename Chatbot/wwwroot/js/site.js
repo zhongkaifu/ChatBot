@@ -12,15 +12,13 @@ Array.prototype.myJoin = function (seperator, start, end) {
 
 function UpdateInfo() {
 
-    var Description = document.getElementById('Description').value;
+    //var Description = document.getElementById('Description').value;
 
-    if (Description == null || Description == "") {
-        Description = document.getElementById('Description').placeholder;
-    }
+    //if (Description == null || Description == "") {
+    //    Description = document.getElementById('Description').placeholder;
+    //}
   
     $("#transcriptText").html("");
-
-
     document.getElementById('inputTurn').value = "";
     document.getElementById("chatGroup").removeAttribute("hidden");
 }
