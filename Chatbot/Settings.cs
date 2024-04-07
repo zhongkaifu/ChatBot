@@ -9,6 +9,9 @@ namespace MedChat
         public static string MessageTag { get; set; }
 
         public static BlobLogs BlobLogs { get; set; }
-    
+
+        public static int MaxWordSizePerTurn { get; set; }
+
+
     }
 }

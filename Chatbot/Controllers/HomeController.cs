@@ -154,7 +154,7 @@ namespace MedChat.Controllers
             {
                 newTurns[turnText.Count - 1] += " EOS";
             }
-            else if (newTurns[^1].Length >= 256)
+            else if (newTurns[^1].Length >= Settings.MaxWordSizePerTurn)
             {
                 int periodIdx = newTurns[^1].LastIndexOf(")");
                 if (periodIdx < 0)

@@ -25,12 +25,13 @@ namespace MedChat
         public static void Main(string[] args)
         {
             Logger.Initialize(Logger.Destination.Console | Logger.Destination.Logfile, Logger.Level.err | Logger.Level.warn | Logger.Level.info | Logger.Level.debug, $"{nameof(MedChat)}_{Seq2SeqSharp.Utils.Utils.GetTimeStamp(DateTime.Now)}.log");
-            Logger.WriteLine($"LetsChat.Health written by Zhongkai Fu(fuzhongkai@gmail.com)");
+            Logger.WriteLine($"ChatBot Framework written by Zhongkai Fu(fuzhongkai@gmail.com)");
 
             var Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             Settings.Language = Configuration["Language"];
             Settings.PromptTag = Configuration["Prompts:PromptTag"];
             Settings.MessageTag = Configuration["Prompts:MessageTag"];
+            Settings.MaxWordSizePerTurn = int.Parse(Configuration["MaxWordSizePerTurn"]);
             Settings.BlobLogs = new Chatbot.BlobLogs(Configuration["BlobLogging:ConnectionString"].ToString(), Configuration["BlobLogging:ContainerName"].ToString());
 
             if (String.IsNullOrEmpty(Configuration["Seq2Seq:ModelFilePath"]) == false)
