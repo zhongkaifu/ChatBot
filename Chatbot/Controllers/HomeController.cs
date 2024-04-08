@@ -152,27 +152,37 @@ namespace MedChat.Controllers
 
             if (newTurns.Count > turnText.Count)
             {
+                newTurns[turnText.Count - 1] = TruncateTurn(newTurns[turnText.Count - 1]);
                 newTurns[turnText.Count - 1] += " EOS";
             }
             else if (newTurns[^1].Length >= Settings.MaxWordSizePerTurn)
             {
-                int periodIdx = newTurns[^1].LastIndexOf(")");
-                if (periodIdx < 0)
-                {
-                    periodIdx = newTurns[^1].LastIndexOf("。");
-                }
-
-                if (periodIdx >= 0)
-                {
-                    newTurns[^1] = newTurns[^1].Substring(0, periodIdx + 1);
-                }
-
+                newTurns[^1] = TruncateTurn(newTurns[^1]);
                 newTurns[^1] += " EOS";
             }
 
             newTurns = newTurns.GetRange(0, turnText.Count);
 
             return newTurns;
-        }                  
+        }
+
+
+        private static string[] TruncateChars = { "?", "）", "。", "！", "”", ")", "..." };
+        private static string TruncateTurn(string turn)
+        {
+            int truncateIdx = -1;
+            foreach (var tchar in TruncateChars)
+            {
+                int idx = turn.LastIndexOf(tchar);
+                truncateIdx = Math.Max(truncateIdx, idx);
+            }
+
+            if (truncateIdx >= 0)
+            {
+                turn = turn.Substring(0, truncateIdx + 1);
+            }
+
+            return turn;
+        }
     }
 }
