@@ -1,4 +1,4 @@
-namespace MedChat.Models
+namespace Chatbot.Models
 {
     public class ErrorViewModel
     {

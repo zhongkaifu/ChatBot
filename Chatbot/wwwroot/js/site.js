@@ -84,6 +84,32 @@ function SendTurn() {
 
 }
 
+
+function RemoveTurn(idx) {
+
+    var sendAjaxRemove = function () {
+        var transcriptEL = document.getElementById("transcriptText");
+        var transcript = transcriptEL.innerHTML;
+
+        $.ajax({
+            type: "POST",
+            url: "/Home/RemoveTurn",
+            dataType: "json",
+            data: { "transcript": transcript, "idx": idx },
+            beforeSend: function () {
+            },
+            success: function (result) {
+                const parts = result.output.split('\t');
+                $("#transcriptText").html(parts[0]);
+            },
+            error: function (err) {
+            }
+        });
+    };
+
+    sendAjaxRemove();
+}
+
 function RegenerateTurn() {
 
     var contiGen = false;

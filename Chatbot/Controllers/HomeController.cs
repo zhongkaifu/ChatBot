@@ -1,4 +1,4 @@
-﻿using MedChat.Models;
+﻿using Chatbot.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -7,7 +7,7 @@ using TensorSharp.CUDA.DeviceCode;
 using System.Net;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MedChat.Controllers
+namespace Chatbot.Controllers
 {
     [Serializable]
     public class BackendResult
@@ -53,6 +53,20 @@ namespace MedChat.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [HttpPost]
+        public IActionResult RemoveTurn(string transcript, int idx)
+        {          
+            transcript = Utils.RemoveHtmlTags(transcript);
+            List<string> turnText = Utils.SplitTurns(transcript);
+
+            turnText = turnText.GetRange(0, idx);
+            BackendResult tr = new BackendResult
+            {
+                Output = String.Join("</div>", Utils.AddHtmlTags(turnText))
+            };
+
+            return new JsonResult(tr);
+        }
 
 
         [HttpPost]
@@ -77,8 +91,15 @@ namespace MedChat.Controllers
                 turnText.Add($"{Settings.MessageTag}");
             }
 
-            turnText = CallInHouseModel(turnText, 0.1f, 1.0f, 1.0f);
-            Logger.WriteLine($"Regenerate Turn: '{String.Join("", turnText)}'");
+            turnText = CallInHouseModel(turnText, 0.0f, 1.0f, 1.0f);
+            var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
+            string rawOutput = String.Join("", turnText);
+            string logLine = $"Client '{remoteIpAddress.ToString()}' Regenerate Turn: '{rawOutput}'";
+            Logger.WriteLine(logLine);
+            if (rawOutput.EndsWith(" EOS"))
+            {
+                Settings.BlobLogs.WriteLine(logLine);
+            }
             BackendResult tr = new BackendResult
             {
                 Output = String.Join("</div>", Utils.AddHtmlTags(turnText))
@@ -128,6 +149,20 @@ namespace MedChat.Controllers
             return new JsonResult(tr);
         }
 
+        public bool IsRepeatTurn(string turn)
+        {
+            var results = Utils.FindRepeatingSubstrings(turn);
+
+            foreach (var pair in results)
+            {
+                if (pair.Key.Length >= 3 && pair.Value >= 2)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Call in-house chat model
@@ -144,6 +179,22 @@ namespace MedChat.Controllers
 
             // Ask model to generate a completed turn
             string outputText = Seq2SeqInstance.Call(inputText, inputText, 8, topP, temperature, penaltyScore);
+
+            if (IsRepeatTurn(outputText))
+            {
+                Logger.WriteLine(Logger.Level.warn, $"Find repeated output = '{outputText}'");
+                outputText = inputText + " EOS";
+            }
+
+            if (outputText.EndsWith(Settings.PromptTag))
+            {
+                outputText = outputText + " EOS";
+            }
+            if (outputText.EndsWith(Settings.MessageTag))
+            {
+                outputText = outputText + " EOS";
+            }
+
             var newTurns = Utils.SplitTurns(outputText);
             if (newTurns.Count < turnText.Count)
             {

@@ -56,6 +56,20 @@ body {font-family: Arial;}
             color: darkgreen;
         }
 
+    /* Button is hidden by default */
+    .hidden-button {
+        display: none;
+/*         position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); */
+    }
+
+    /* Show the button when hovering over the container */
+    .user-message:hover .hidden-button {
+        display: inline-block;
+    }
+
 </style>
 <body>
 
@@ -70,7 +84,7 @@ body {font-family: Arial;}
         </p>
         <hr/>
         <p hidden id="chatGroup">
-            <label id="transcriptText"><b>Transcript</b></label>
+        <label id="transcriptText" style="width:100%"><b>Transcript</b></label>
             @if (_config["Language"] == "zh")
             {
                 <button type="button" title="不满意？重新生成最后一轮对话" id="regenerateTurn" onclick="RegenerateTurn()">&#x27F3;</button>

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Net;
 
-namespace MedChat
+namespace Chatbot
 {
     /// <summary>
     /// 
@@ -24,7 +24,7 @@ namespace MedChat
     {
         public static void Main(string[] args)
         {
-            Logger.Initialize(Logger.Destination.Console | Logger.Destination.Logfile, Logger.Level.err | Logger.Level.warn | Logger.Level.info | Logger.Level.debug, $"{nameof(MedChat)}_{Seq2SeqSharp.Utils.Utils.GetTimeStamp(DateTime.Now)}.log");
+            Logger.Initialize(Logger.Destination.Console | Logger.Destination.Logfile, Logger.Level.err | Logger.Level.warn | Logger.Level.info | Logger.Level.debug, $"{nameof(Chatbot)}_{Seq2SeqSharp.Utils.Utils.GetTimeStamp(DateTime.Now)}.log");
             Logger.WriteLine($"ChatBot Framework written by Zhongkai Fu(fuzhongkai@gmail.com)");
 
             var Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -55,7 +55,7 @@ namespace MedChat
                 var compilerOptions = Configuration["Seq2Seq:CompilerOptions"];
                 var amp = String.IsNullOrEmpty(Configuration["Seq2Seq:AMP"]) ? false : bool.Parse(Configuration["Seq2Seq:AMP"]);
                 var cudaMemoryAllocatorType = String.IsNullOrEmpty(Configuration["Seq2Seq:CudaMemoryAllocatorType"]) ? CudaMemoryDeviceAllocatorType.CudaMemoryPool : Configuration["Seq2Seq:CudaMemoryAllocatorType"].ToEnum<CudaMemoryDeviceAllocatorType>();
-
+                var attentionType = String.IsNullOrEmpty(Configuration["Seq2Seq:AttentionType"]) ? AttentionTypeEnums.Classic : Configuration["Seq2Seq:AttentionType"].ToEnum<AttentionTypeEnums>();
 
                 SentencePiece? srcSpm = null;
                 if (String.IsNullOrEmpty(Configuration["SourceSpm:ModelFilePath"]) == false)
@@ -87,7 +87,8 @@ namespace MedChat
                                                enableTensorCore: enableTensorCore,
                                                compilerOptions: compilerOptions,
                                                amp: amp,
-                                               cudaMemoryDeviceAllocatorType: cudaMemoryAllocatorType);
+                                               cudaMemoryDeviceAllocatorType: cudaMemoryAllocatorType,
+                                               attentionType: attentionType);
             }
 
             var builder = WebApplication.CreateBuilder(args);

@@ -1,6 +1,6 @@
 ﻿using Chatbot;
 
-namespace MedChat
+namespace Chatbot
 {
     public static class Settings
     {

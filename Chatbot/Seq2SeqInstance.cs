@@ -18,7 +18,7 @@ using Seq2SeqSharp.Tools;
 using TensorSharp.CUDA.ContextState;
 using Microsoft.Extensions.Logging;
 
-namespace MedChat
+namespace Chatbot
 {
     public enum ModelType
     {
@@ -44,7 +44,7 @@ namespace MedChat
 
         static public void Initialization(string modelFilePath, int maxTestSrcSentLength, int maxTestTgtSentLength, int maxTokenToGeneration, ProcessorTypeEnums processorType, string deviceIds, SentencePiece? srcSpm, SentencePiece? tgtSpm,
             Seq2SeqSharp.Utils.DecodingStrategyEnums decodingStrategyEnum, float memoryUsageRatio, string mklInstructions, int beamSearchSize, string blockedTokens, ModelType modelType,
-            string wordMappingFilePath, bool enableTensorCore, string compilerOptions, bool amp, CudaMemoryDeviceAllocatorType cudaMemoryDeviceAllocatorType)
+            string wordMappingFilePath, bool enableTensorCore, string compilerOptions, bool amp, CudaMemoryDeviceAllocatorType cudaMemoryDeviceAllocatorType, AttentionTypeEnums attentionType)
         {
             opts = new Seq2SeqOptions();
             opts.ModelFilePath = modelFilePath;
@@ -65,6 +65,7 @@ namespace MedChat
             opts.IsTgtEmbeddingTrainable = false;
             opts.CudaMemoryAllocatorType = cudaMemoryDeviceAllocatorType;
             opts.RandomSeed = 1234;
+            opts.AttentionType = attentionType;
 
             MaxTokenToGenerate = maxTokenToGeneration;
 
@@ -194,10 +195,10 @@ namespace MedChat
                 string rst = String.Join(" ", nrs[0].Output[0][0].ToArray(), 0, nrs[0].Output[0][0].Count);
                 bool isEnded = (rst.EndsWith("</s>") || rst == tgtInput || (nrs[0].Status == NetworkResultStatus.OOM && rst == tgtInput));
                 rst = (m_tgtSpm != null) ? m_tgtSpm.Decode(rst) : rst;
-                //if (isEnded)
-                //{
-                //    rst += " EOS";
-                //}
+                if (isEnded)
+                {
+                    rst += " EOS";
+                }
 
 
                 if (startWithSpace)
