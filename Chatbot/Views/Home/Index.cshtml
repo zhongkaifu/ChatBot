@@ -57,16 +57,20 @@ body {font-family: Arial;}
         }
 
     /* Button is hidden by default */
-    .hidden-button {
+    .hidden-button-ai {
         display: none;
-/*         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%); */
+    }
+
+    .hidden-button-user {
+        display: none;
     }
 
     /* Show the button when hovering over the container */
-    .user-message:hover .hidden-button {
+    .user-message:hover .hidden-button-user {
+        display: inline-block;
+    }
+
+    .ai-message:hover .hidden-button-ai {
         display: inline-block;
     }
 
@@ -85,14 +89,14 @@ body {font-family: Arial;}
         <hr/>
         <p hidden id="chatGroup">
         <label id="transcriptText" style="width:100%"><b>Transcript</b></label>
-            @if (_config["Language"] == "zh")
+@*             @if (_config["Language"] == "zh")
             {
                 <button type="button" title="不满意？重新生成最后一轮对话" id="regenerateTurn" onclick="RegenerateTurn()">&#x27F3;</button>
             }
             else
             {
                 <button type="button" title="Regenerate The Last Turn" id="regenerateTurn" onclick="RegenerateTurn()">&#x27F3;</button>
-            }
+            } *@
             <br />
             <img hidden id="dotdotdot" src="@Url.Content("~/images/dot.gif")" width="50" />
             <br />

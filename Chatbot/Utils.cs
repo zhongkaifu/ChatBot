@@ -70,11 +70,11 @@ namespace Chatbot
                 if (line.Contains(Settings.MessageTag))
                 {
                     //newLine = $"<img src=\"/images/writer.jpg\" width=\"50\">" + line.Replace(Settings.MessageTag, $"<div class=\"ai-message\">");
-                    newLine = line.Replace(Settings.MessageTag, $"<div class=\"ai-message\"><img src=\"/images/writer.jpg\" width=\"50\"></img>");
+                    newLine = line.Replace(Settings.MessageTag, $"<div class=\"ai-message\"><button class=\"hidden-button-ai\" type=\"button\" title=\"Refresh\" id=\"refreshTurn" + turnIdx.ToString() + "\" onclick=\"RefreshTurn(" + turnIdx.ToString() + ")\"><img src=\"/images/refresh.png\" width=\"10\"></img></button><img src=\"/images/writer.jpg\" width=\"50\"></img>");
                 }
                 else
                 {
-                    newLine = line.Replace(Settings.PromptTag, $"<div class=\"user-message\">") + "<img src=\"/images/reader.jpg\" width=\"50\"></img><button class=\"hidden-button\" type=\"button\" title=\"Remove\" id=\"removeTurn" + turnIdx.ToString() + "\" onclick=\"RemoveTurn(" + turnIdx.ToString() + ")\"><img src=\"/images/trashbin.png\" width=\"10\"></img></button>";
+                    newLine = line.Replace(Settings.PromptTag, $"<div class=\"user-message\">") + "<img src=\"/images/reader.jpg\" width=\"50\"></img><button class=\"hidden-button-user\" type=\"button\" title=\"Remove\" id=\"removeTurn" + turnIdx.ToString() + "\" onclick=\"RemoveTurn(" + turnIdx.ToString() + ")\"><img src=\"/images/trashbin.png\" width=\"10\"></img></button>";
                 }
 
                 newLine = newLine.Replace("\n", "\n<br>");

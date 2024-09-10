@@ -110,7 +110,7 @@ function RemoveTurn(idx) {
     sendAjaxRemove();
 }
 
-function RegenerateTurn() {
+function RefreshTurn(idx) {
 
     var contiGen = false;
 
@@ -120,9 +120,9 @@ function RegenerateTurn() {
 
         $.ajax({
             type: "POST",
-            url: "/Home/RegenerateTurn",
+            url: "/Home/RefreshTurn",
             dataType: "json",
-            data: { "transcript": transcript, "contiGen": contiGen },
+            data: { "transcript": transcript, "contiGen": contiGen, "idx": idx },
             beforeSend: function () {
                 $("#btnNextTurn").attr("disabled", true);
                 $("#regenerateTurn").attr("disabled", true);
@@ -156,3 +156,50 @@ function RegenerateTurn() {
 
     sendAjaxRegen();
 }
+
+//function RegenerateTurn() {
+
+//    var contiGen = false;
+
+//    var sendAjaxRegen = function () {
+//        var transcriptEL = document.getElementById("transcriptText");
+//        var transcript = transcriptEL.innerHTML;
+
+//        $.ajax({
+//            type: "POST",
+//            url: "/Home/RegenerateTurn",
+//            dataType: "json",
+//            data: { "transcript": transcript, "contiGen": contiGen },
+//            beforeSend: function () {
+//                $("#btnNextTurn").attr("disabled", true);
+//                $("#regenerateTurn").attr("disabled", true);
+//                document.getElementById("dotdotdot").removeAttribute("hidden");
+//            },
+//            success: function (result) {
+//                const parts = result.output.split('\t');
+//                var EOS = false;
+//                if (parts[0].endsWith(" EOS")) {
+//                    EOS = true;
+//                    parts[0] = parts[0].substring(0, parts[0].length - 4);
+//                }
+
+//                $("#transcriptText").html(parts[0]);
+//                $("#btnNextTurn").attr("disabled", false);
+//                $("#regenerateTurn").attr("disabled", false);
+//                document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
+
+//                if (EOS == false) {
+//                    contiGen = true;
+//                    sendAjaxRegen();
+//                }
+//            },
+//            error: function (err) {
+//                $("#btnNextTurn").attr("disabled", false);
+//                $("#regenerateTurn").attr("disabled", false);
+//                document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
+//            }
+//        });
+//    };
+
+//    sendAjaxRegen();
+//}
