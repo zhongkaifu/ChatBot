@@ -107,46 +107,6 @@ namespace Chatbot.Controllers
             return new JsonResult(tr);
         }
 
-
-        //[HttpPost]
-        //public IActionResult RegenerateTurn(string transcript, bool contiGen)
-        //{
-        //    transcript = Utils.RemoveHtmlTags(transcript);
-        //    List<string> turnText = Utils.SplitTurns(transcript);
-
-        //    if (turnText.Count == 1)
-        //    {
-        //        BackendResult tr2 = new BackendResult
-        //        {
-        //            Output = String.Join("</div>", Utils.AddHtmlTags(turnText))
-        //        };
-
-        //        return new JsonResult(tr2);
-        //    }
-
-        //    if (contiGen == false)
-        //    {
-        //        turnText.RemoveAt(turnText.Count - 1);
-        //        turnText.Add($"{Settings.MessageTag}");
-        //    }
-
-        //    turnText = CallInHouseModel(turnText, 0.0f, 1.0f, 1.0f);
-        //    var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
-        //    string rawOutput = String.Join("", turnText);
-        //    string logLine = $"Client '{remoteIpAddress.ToString()}' Regenerate Turn: '{rawOutput}'";
-        //    Logger.WriteLine(logLine);
-        //    if (rawOutput.EndsWith(" EOS"))
-        //    {
-        //        Settings.BlobLogs.WriteLine(logLine);
-        //    }
-        //    BackendResult tr = new BackendResult
-        //    {
-        //        Output = String.Join("</div>", Utils.AddHtmlTags(turnText))
-        //    };
-
-        //    return new JsonResult(tr);
-        //}
-
         [HttpPost]
         public IActionResult SendTurn(string transcript, string inputTurn, bool contiGen)
         {

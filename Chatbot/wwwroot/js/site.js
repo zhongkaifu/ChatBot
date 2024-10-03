@@ -10,25 +10,17 @@ Array.prototype.myJoin = function (seperator, start, end) {
     return this.slice(start, end).join(seperator);
 };
 
-function UpdateInfo() {
-
-    //var Description = document.getElementById('Description').value;
-
-    //if (Description == null || Description == "") {
-    //    Description = document.getElementById('Description').placeholder;
-    //}
-  
+function UpdateInfo() {  
     $("#transcriptText").html("");
     document.getElementById('inputTurn').value = "";
     document.getElementById("chatGroup").removeAttribute("hidden");
 }
 
 var needToStop = false;
-
 function SendTurn() {
-
     var contiGen = false;
-
+    needToStop = true;
+    $("#btnNextTurn").attr("value", "Stop");
     var sendAjax = function () {
         var transcriptEL = document.getElementById("transcriptText");
         var transcript = transcriptEL.innerHTML;
@@ -40,41 +32,37 @@ function SendTurn() {
             type: "POST",
             url: "/Home/SendTurn",
             dataType: "json",
-            data: { "transcript": transcript, "inputTurn": inputTurn, "contiGen": contiGen},
+            data: { "transcript": transcript, "inputTurn": inputTurn, "contiGen": contiGen && !needToStop },
             beforeSend: function () {
-                $("#regenerateTurn").attr("disabled", true);
                 document.getElementById("dotdotdot").removeAttribute("hidden");
 
-                if (contiGen == false && (inputTurn == null || inputTurn == "")) {
-                    needToStop = true;
-                }
-                else {
+                if ((inputTurn != null && inputTurn != "")) {
                     needToStop = false;
                 }
             },
             success: function (result) {
 
                 const parts = result.output.split('\t');
-                var EOS = false;
                 if (parts[0].endsWith(" EOS")) {
-                    EOS = true;
                     parts[0] = parts[0].substring(0, parts[0].length - 4);
+                    needToStop = true;
                 }
 
 
                 $("#transcriptText").html(parts[0]);
-                $("#regenerateTurn").attr("disabled", false);
                 document.getElementById('inputTurn').value = "";
                 document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
 
-                if (EOS == false && needToStop == false) {
+                if (needToStop == false) {
                     contiGen = true;
                     sendAjax();
                 }
+                else {
+                    $("#btnNextTurn").attr("value", "Start");
+                }
             },
             error: function (err) {
-                $("#btnNextTurn").attr("disabled", false);
-                $("#regenerateTurn").attr("disabled", false);
+                $("#btnNextTurn").attr("value", "Start");
                 document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
             }
         });
@@ -113,7 +101,9 @@ function RemoveTurn(idx) {
 function RefreshTurn(idx) {
 
     var contiGen = false;
+    needToStop = false;
 
+    $("#btnNextTurn").attr("value", "Stop");
     var sendAjaxRegen = function () {
         var transcriptEL = document.getElementById("transcriptText");
         var transcript = transcriptEL.innerHTML;
@@ -122,33 +112,30 @@ function RefreshTurn(idx) {
             type: "POST",
             url: "/Home/RefreshTurn",
             dataType: "json",
-            data: { "transcript": transcript, "contiGen": contiGen, "idx": idx },
+            data: { "transcript": transcript, "contiGen": contiGen && !needToStop, "idx": idx },
             beforeSend: function () {
-                $("#btnNextTurn").attr("disabled", true);
-                $("#regenerateTurn").attr("disabled", true);
                 document.getElementById("dotdotdot").removeAttribute("hidden");
             },
             success: function (result) {
                 const parts = result.output.split('\t');
-                var EOS = false;
                 if (parts[0].endsWith(" EOS")) {
-                    EOS = true;
                     parts[0] = parts[0].substring(0, parts[0].length - 4);
+                    needToStop = true;
                 }
 
                 $("#transcriptText").html(parts[0]);
-                $("#btnNextTurn").attr("disabled", false);
-                $("#regenerateTurn").attr("disabled", false);
                 document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
 
-                if (EOS == false) {
+                if (needToStop == false) {
                     contiGen = true;
                     sendAjaxRegen();
                 }
+                else {
+                    $("#btnNextTurn").attr("value", "Start");
+                }
             },
             error: function (err) {
-                $("#btnNextTurn").attr("disabled", false);
-                $("#regenerateTurn").attr("disabled", false);
+                $("#btnNextTurn").attr("value", "Start");
                 document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
             }
         });
@@ -156,50 +143,3 @@ function RefreshTurn(idx) {
 
     sendAjaxRegen();
 }
-
-//function RegenerateTurn() {
-
-//    var contiGen = false;
-
-//    var sendAjaxRegen = function () {
-//        var transcriptEL = document.getElementById("transcriptText");
-//        var transcript = transcriptEL.innerHTML;
-
-//        $.ajax({
-//            type: "POST",
-//            url: "/Home/RegenerateTurn",
-//            dataType: "json",
-//            data: { "transcript": transcript, "contiGen": contiGen },
-//            beforeSend: function () {
-//                $("#btnNextTurn").attr("disabled", true);
-//                $("#regenerateTurn").attr("disabled", true);
-//                document.getElementById("dotdotdot").removeAttribute("hidden");
-//            },
-//            success: function (result) {
-//                const parts = result.output.split('\t');
-//                var EOS = false;
-//                if (parts[0].endsWith(" EOS")) {
-//                    EOS = true;
-//                    parts[0] = parts[0].substring(0, parts[0].length - 4);
-//                }
-
-//                $("#transcriptText").html(parts[0]);
-//                $("#btnNextTurn").attr("disabled", false);
-//                $("#regenerateTurn").attr("disabled", false);
-//                document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
-
-//                if (EOS == false) {
-//                    contiGen = true;
-//                    sendAjaxRegen();
-//                }
-//            },
-//            error: function (err) {
-//                $("#btnNextTurn").attr("disabled", false);
-//                $("#regenerateTurn").attr("disabled", false);
-//                document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
-//            }
-//        });
-//    };
-
-//    sendAjaxRegen();
-//}
