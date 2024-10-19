@@ -56,6 +56,7 @@ namespace Chatbot
                 var amp = String.IsNullOrEmpty(Configuration["Seq2Seq:AMP"]) ? false : bool.Parse(Configuration["Seq2Seq:AMP"]);
                 var cudaMemoryAllocatorType = String.IsNullOrEmpty(Configuration["Seq2Seq:CudaMemoryAllocatorType"]) ? CudaMemoryDeviceAllocatorType.CudaMemoryPool : Configuration["Seq2Seq:CudaMemoryAllocatorType"].ToEnum<CudaMemoryDeviceAllocatorType>();
                 var attentionType = String.IsNullOrEmpty(Configuration["Seq2Seq:AttentionType"]) ? AttentionTypeEnums.Classic : Configuration["Seq2Seq:AttentionType"].ToEnum<AttentionTypeEnums>();
+                var kvCache = string.IsNullOrEmpty(Configuration["Seq2Seq:KVCache"]) ? true : bool.Parse(Configuration["Seq2Seq:KVCache"]);
 
                 SentencePiece? srcSpm = null;
                 if (String.IsNullOrEmpty(Configuration["SourceSpm:ModelFilePath"]) == false)
@@ -88,7 +89,8 @@ namespace Chatbot
                                                compilerOptions: compilerOptions,
                                                amp: amp,
                                                cudaMemoryDeviceAllocatorType: cudaMemoryAllocatorType,
-                                               attentionType: attentionType);
+                                               attentionType: attentionType,
+                                               kvCache: kvCache);
             }
 
             var builder = WebApplication.CreateBuilder(args);

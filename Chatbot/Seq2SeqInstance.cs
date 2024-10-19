@@ -44,7 +44,7 @@ namespace Chatbot
 
         static public void Initialization(string modelFilePath, int maxTestSrcSentLength, int maxTestTgtSentLength, int maxTokenToGeneration, ProcessorTypeEnums processorType, string deviceIds, SentencePiece? srcSpm, SentencePiece? tgtSpm,
             Seq2SeqSharp.Utils.DecodingStrategyEnums decodingStrategyEnum, float memoryUsageRatio, string mklInstructions, int beamSearchSize, string blockedTokens, ModelType modelType,
-            string wordMappingFilePath, bool enableTensorCore, string compilerOptions, bool amp, CudaMemoryDeviceAllocatorType cudaMemoryDeviceAllocatorType, AttentionTypeEnums attentionType)
+            string wordMappingFilePath, bool enableTensorCore, string compilerOptions, bool amp, CudaMemoryDeviceAllocatorType cudaMemoryDeviceAllocatorType, AttentionTypeEnums attentionType, bool kvCache)
         {
             opts = new Seq2SeqOptions();
             opts.ModelFilePath = modelFilePath;
@@ -66,6 +66,7 @@ namespace Chatbot
             opts.CudaMemoryAllocatorType = cudaMemoryDeviceAllocatorType;
             opts.RandomSeed = 1234;
             opts.AttentionType = attentionType;
+            opts.UseKVCache = kvCache;
 
             MaxTokenToGenerate = maxTokenToGeneration;
 
