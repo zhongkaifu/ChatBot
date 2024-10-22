@@ -24,7 +24,7 @@
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="3.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="protobuf-net" Version="3.2.30" />
-    <PackageReference Include="Seq2SeqSharp" Version="2.8.15" />
+    <PackageReference Include="Seq2SeqSharp" Version="2.8.17" />
     <PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
   </ItemGroup>
 
