@@ -172,7 +172,7 @@ namespace Chatbot
             decodingOptions.Temperature = temperature + opts.DecodingTemperature;
             decodingOptions.RepeatPenalty = repeatPenalty + opts.DecodingRepeatPenalty;
 
-            if (temperature == 0.0f)
+            if (decodingOptions.Temperature == 0.0f)
             {
                 decodingOptions.DecodingStrategy = DecodingStrategyEnums.GreedySearch;
             }
