@@ -44,7 +44,7 @@ namespace Chatbot
 
         static public void Initialization(string modelFilePath, int maxTestSrcSentLength, int maxTestTgtSentLength, int maxTokenToGeneration, ProcessorTypeEnums processorType, string deviceIds, SentencePiece? srcSpm, SentencePiece? tgtSpm,
             Seq2SeqSharp.Utils.DecodingStrategyEnums decodingStrategyEnum, float memoryUsageRatio, string mklInstructions, int beamSearchSize, string blockedTokens, ModelType modelType,
-            string wordMappingFilePath, bool enableTensorCore, string compilerOptions, bool amp, CudaMemoryDeviceAllocatorType cudaMemoryDeviceAllocatorType, AttentionTypeEnums attentionType, bool kvCache)
+            string wordMappingFilePath, bool enableTensorCore, string compilerOptions, bool amp, CudaMemoryDeviceAllocatorType cudaMemoryDeviceAllocatorType, AttentionTypeEnums attentionType, bool kvCache, float baseTopP, float baseRepeatPenatly, float baseTemperature)
         {
             opts = new Seq2SeqOptions();
             opts.ModelFilePath = modelFilePath;
@@ -67,6 +67,9 @@ namespace Chatbot
             opts.RandomSeed = 1234;
             opts.AttentionType = attentionType;
             opts.UseKVCache = kvCache;
+            opts.DecodingTopP = baseTopP;
+            opts.DecodingRepeatPenalty = baseRepeatPenatly;
+            opts.DecodingTemperature = baseTemperature;
 
             MaxTokenToGenerate = maxTokenToGeneration;
 
@@ -165,9 +168,9 @@ namespace Chatbot
             DecodingOptions decodingOptions = opts.CreateDecodingOptions();
             decodingOptions.MaxTgtSentLength = tokenNumToGenerate;
             decodingOptions.BlockedTokens = m_blockedTokens;
-            decodingOptions.TopP = topP;
-            decodingOptions.Temperature = temperature;
-            decodingOptions.RepeatPenalty = repeatPenalty;
+            decodingOptions.TopP = topP + opts.DecodingTopP;
+            decodingOptions.Temperature = temperature + opts.DecodingTemperature;
+            decodingOptions.RepeatPenalty = repeatPenalty + opts.DecodingRepeatPenalty;
 
             if (temperature == 0.0f)
             {

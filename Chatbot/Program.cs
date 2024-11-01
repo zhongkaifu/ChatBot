@@ -58,7 +58,11 @@ namespace Chatbot
                 var attentionType = String.IsNullOrEmpty(Configuration["Seq2Seq:AttentionType"]) ? AttentionTypeEnums.Classic : Configuration["Seq2Seq:AttentionType"].ToEnum<AttentionTypeEnums>();
                 var kvCache = string.IsNullOrEmpty(Configuration["Seq2Seq:KVCache"]) ? true : bool.Parse(Configuration["Seq2Seq:KVCache"]);
 
-                SentencePiece? srcSpm = null;
+                var topPSampling = String.IsNullOrEmpty(Configuration["Seq2Seq:TopPSampling"]) ? 0.0f : float.Parse(Configuration["Seq2Seq:TopPSampling"]);
+                var repeatPenalty = String.IsNullOrEmpty(Configuration["Seq2Seq:RepeatPenalty"]) ? 1.0f : float.Parse(Configuration["Seq2Seq:RepeatPenalty"]);
+                var temperature = String.IsNullOrEmpty(Configuration["Seq2Seq:Temperature"]) ? 0.0f : float.Parse(Configuration["Seq2Seq:Temperature"]);
+
+                SentencePiece ? srcSpm = null;
                 if (String.IsNullOrEmpty(Configuration["SourceSpm:ModelFilePath"]) == false)
                 {
                     srcSpm = new SentencePiece(Configuration["SourceSpm:ModelFilePath"]);
@@ -90,7 +94,10 @@ namespace Chatbot
                                                amp: amp,
                                                cudaMemoryDeviceAllocatorType: cudaMemoryAllocatorType,
                                                attentionType: attentionType,
-                                               kvCache: kvCache);
+                                               kvCache: kvCache,
+                                               baseTopP: topPSampling,
+                                               baseRepeatPenatly: repeatPenalty,
+                                               baseTemperature: temperature);
             }
 
             var builder = WebApplication.CreateBuilder(args);
