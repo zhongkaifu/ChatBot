@@ -21,6 +21,17 @@ function SendTurn() {
     var contiGen = false;
     needToStop = true;
     $("#btnNextTurn").attr("value", "Stop");
+
+    const buttons = document.querySelectorAll(".hidden-button-ai");
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+
+    const buttons2 = document.querySelectorAll(".hidden-button-user");
+    buttons2.forEach(button => {
+        button.disabled = true;
+    });
+
     var sendAjax = function () {
         var transcriptEL = document.getElementById("transcriptText");
         var transcript = transcriptEL.innerHTML;
@@ -59,11 +70,31 @@ function SendTurn() {
                 }
                 else {
                     $("#btnNextTurn").attr("value", "Start");
+
+                    const buttons = document.querySelectorAll(".hidden-button-ai");
+                    buttons.forEach(button => {
+                        button.disabled = false;
+                    });
+
+                    const buttons2 = document.querySelectorAll(".hidden-button-user");
+                    buttons2.forEach(button => {
+                        button.disabled = false;
+                    });
                 }
             },
             error: function (err) {
                 $("#btnNextTurn").attr("value", "Start");
                 document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
+
+                const buttons = document.querySelectorAll(".hidden-button-ai");
+                buttons.forEach(button => {
+                    button.disabled = false;
+                });
+
+                const buttons2 = document.querySelectorAll(".hidden-button-user");
+                buttons2.forEach(button => {
+                    button.disabled = false;
+                });
             }
         });
     };
@@ -104,6 +135,17 @@ function RefreshTurn(idx) {
     needToStop = false;
 
     $("#btnNextTurn").attr("value", "Stop");
+
+    const buttons = document.querySelectorAll(".hidden-button-ai");
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+
+    const buttons2 = document.querySelectorAll(".hidden-button-user");
+    buttons2.forEach(button => {
+        button.disabled = true;
+    });
+
     var sendAjaxRegen = function () {
         var transcriptEL = document.getElementById("transcriptText");
         var transcript = transcriptEL.innerHTML;
@@ -132,11 +174,31 @@ function RefreshTurn(idx) {
                 }
                 else {
                     $("#btnNextTurn").attr("value", "Start");
+
+                    const buttons = document.querySelectorAll(".hidden-button-ai");
+                    buttons.forEach(button => {
+                        button.disabled = false;
+                    });
+
+                    const buttons2 = document.querySelectorAll(".hidden-button-user");
+                    buttons2.forEach(button => {
+                        button.disabled = false;
+                    });
                 }
             },
             error: function (err) {
                 $("#btnNextTurn").attr("value", "Start");
                 document.getElementById("dotdotdot").setAttribute("hidden", "hidden");
+
+                const buttons = document.querySelectorAll(".hidden-button-ai");
+                buttons.forEach(button => {
+                    button.disabled = false;
+                });
+
+                const buttons2 = document.querySelectorAll(".hidden-button-user");
+                buttons2.forEach(button => {
+                    button.disabled = false;
+                });
             }
         });
     };

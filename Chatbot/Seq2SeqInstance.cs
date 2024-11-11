@@ -199,6 +199,11 @@ namespace Chatbot
                 string rst = String.Join(" ", nrs[0].Output[0][0].ToArray(), 0, nrs[0].Output[0][0].Count);
                 rst = rst.Replace("<s>", "").Trim();
 
+                if (nrs[0].Status == NetworkResultStatus.OOM)
+                {
+                    Logger.WriteLine(Logger.Level.warn, $"Out of memory: {rst}");
+                }
+
                 bool isEnded = (rst.EndsWith("</s>") || rst == tgtInput || (nrs[0].Status == NetworkResultStatus.OOM && rst == tgtInput));
                 rst = (m_tgtSpm != null) ? m_tgtSpm.Decode(rst) : rst;
                 if (isEnded)

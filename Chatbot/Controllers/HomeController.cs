@@ -90,7 +90,7 @@ namespace Chatbot.Controllers
                 turnText.Add($"{Settings.MessageTag}");
             }
 
-            turnText = CallInHouseModel(turnText, 0.0f, 1.0f, 1.0f);
+            turnText = CallInHouseModel(turnText, 0.1f, 1.0f, 0.0f);
             var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
             string rawOutput = String.Join("", turnText);
             string logLine = $"Client '{remoteIpAddress.ToString()}' Regenerate Turn: '{rawOutput}'";
@@ -130,7 +130,7 @@ namespace Chatbot.Controllers
             }
 
             // Call model to generate outputs
-            turnText = CallInHouseModel(turnText, 0.0f, 0.0f, 1.0f);
+            turnText = CallInHouseModel(turnText, 0.0f, 0.0f, 0.0f);
             
             var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
             string rawOutput = String.Join("", turnText);
