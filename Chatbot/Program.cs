@@ -29,8 +29,8 @@ namespace Chatbot
 
             var Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             Settings.Language = Configuration["Language"];
-            Settings.PromptTag = Configuration["Prompts:PromptTag"];
-            Settings.MessageTag = Configuration["Prompts:MessageTag"];
+            Settings.PromptTag = Configuration["Seq2Seq:PromptTag"];
+            Settings.MessageTag = Configuration["Seq2Seq:MessageTag"];
             Settings.MaxWordSizePerTurn = int.Parse(Configuration["MaxWordSizePerTurn"]);
             Settings.BlobLogs = new Chatbot.BlobLogs(Configuration["BlobLogging:ConnectionString"].ToString(), Configuration["BlobLogging:ContainerName"].ToString());
 

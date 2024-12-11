@@ -1,7 +1,7 @@
 ﻿@inject IConfiguration _config
 
 @{
-    ViewData["Title"] = @_config["Prompts:Title"];
+    ViewData["Title"] = @_config[$"Prompts:{Utils.TrimUrl(Context.Request.Host.ToString())}:Title"];
 }
 
 
@@ -80,11 +80,12 @@ body {font-family: Arial;}
     
         <p id="infoGroup">
             <p id="pDescription">
-        <label id="promptVisitReason">@_config["Prompts:Description"]:</label> <input hidden type="text" id="Description" name="Description" placeholder="无" cols="150" rows="1" style="width:100%" />
+    <label id="promptVisitReason">@_config[$"Prompts:{Utils.TrimUrl(Context.Request.Host.ToString())}:Description"]:</label>
+    <input hidden type="text" id="Description" name="Description" placeholder="无" cols="150" rows="1" style="width:100%" />
             <br />
             </p>
             <br />
-        <input type="button" id="btnUpdateInfo" value=@_config["Prompts:Update"] onclick="UpdateInfo()" />
+    <input type="button" id="btnUpdateInfo" value=@_config[$"Prompts:{Utils.TrimUrl(Context.Request.Host.ToString())}:Update"] onclick="UpdateInfo()" />
         </p>
         <hr/>
         <p hidden id="chatGroup">
@@ -92,11 +93,11 @@ body {font-family: Arial;}
             <br />
             <img hidden id="dotdotdot" src="@Url.Content("~/images/dot.gif")" width="50" />
             <br />
-            <label id="promptInputPatient">@_config["Prompts:TypeTurn"]</label>
+        <label id="promptInputPatient">@_config[$"Prompts:{Utils.TrimUrl(Context.Request.Host.ToString())}:TypeTurn"]</label>
             <br />
             <input type="text" id="inputTurn" name="inputTurn" cols="150" rows="1" style="width:100%" autofocus />
             <br />
-            <input type="button" id="btnNextTurn" value=@_config["Prompts:Send"] onclick="SendTurn()" />
+        <input type="button" id="btnNextTurn" value=@_config[$"Prompts:{Utils.TrimUrl(Context.Request.Host.ToString())}:Send"] onclick="SendTurn()" />
         </p>
         <hr />
       

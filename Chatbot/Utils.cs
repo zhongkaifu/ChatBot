@@ -59,7 +59,24 @@ namespace Chatbot
 
             return turns;
         }
-        
+
+        public static string TrimUrl(string url)
+        {
+            url = url.ToLower();
+            int idx = url.IndexOf(":");
+            if (idx >= 0)
+            {
+                url = url.Substring(0, idx);
+            }
+
+            if (url.StartsWith("www."))
+            {
+                url = url.Substring(4);
+            }
+
+            return url;
+        }
+
         public static List<string> AddHtmlTags(List<string> lines)
         {
             List<string> newLines = new List<string>();

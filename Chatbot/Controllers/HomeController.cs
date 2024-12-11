@@ -6,6 +6,7 @@ using AdvUtils;
 using TensorSharp.CUDA.DeviceCode;
 using System.Net;
 using System.Diagnostics.CodeAnalysis;
+using Azure.Core;
 
 namespace Chatbot.Controllers
 {
