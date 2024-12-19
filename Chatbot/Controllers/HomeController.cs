@@ -92,14 +92,6 @@ namespace Chatbot.Controllers
             }
 
             turnText = CallInHouseModel(turnText, 0.1f, 1.0f, 0.0f);
-            var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
-            string rawOutput = String.Join("", turnText);
-            string logLine = $"Client '{remoteIpAddress.ToString()}' Regenerate Turn: '{rawOutput}'";
-            Logger.WriteLine(logLine);
-            if (rawOutput.EndsWith(" EOS"))
-            {
-                Settings.BlobLogs.WriteLine(logLine);
-            }
             BackendResult tr = new BackendResult
             {
                 Output = String.Join("</div>", Utils.AddHtmlTags(turnText))
@@ -131,16 +123,7 @@ namespace Chatbot.Controllers
             }
 
             // Call model to generate outputs
-            turnText = CallInHouseModel(turnText, 0.0f, 0.0f, 0.0f);
-            
-            var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
-            string rawOutput = String.Join("", turnText);
-            string logLine = $"Client '{remoteIpAddress.ToString()}' New Turn: '{rawOutput}'";
-            Logger.WriteLine(logLine);
-            if (rawOutput.EndsWith(" EOS"))
-            {
-                Settings.BlobLogs.WriteLine(logLine);
-            }
+            turnText = CallInHouseModel(turnText, 0.0f, 0.0f, 0.0f);           
             BackendResult tr = new BackendResult
             {
                 Output = String.Join("</div>", Utils.AddHtmlTags(turnText))

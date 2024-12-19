@@ -42,6 +42,20 @@ namespace Chatbot
 
         static object locker = new object();
 
+        private static void Ss_KVCacheRemoveWatcher(object sender, EventArgs e)
+        {
+            KVCacheRemoveEventArg ep = e as KVCacheRemoveEventArg;
+            if (ep.Reason != "Removed")
+            {
+                string key = ep.Key;
+                if (m_tgtSpm != null)
+                {
+                    key = m_tgtSpm.Decode(key);
+                }
+                Logger.WriteLine(Logger.Level.debug, $"KV Cache Removed due to '{ep.Reason}' Key = '{ep.Key}'");
+            }
+        }
+
         static public void Initialization(string modelFilePath, int maxTestSrcSentLength, int maxTestTgtSentLength, int maxTokenToGeneration, ProcessorTypeEnums processorType, string deviceIds, SentencePiece? srcSpm, SentencePiece? tgtSpm,
             Seq2SeqSharp.Utils.DecodingStrategyEnums decodingStrategyEnum, float memoryUsageRatio, string mklInstructions, int beamSearchSize, string blockedTokens, ModelType modelType,
             string wordMappingFilePath, bool enableTensorCore, string compilerOptions, bool amp, CudaMemoryDeviceAllocatorType cudaMemoryDeviceAllocatorType, AttentionTypeEnums attentionType, bool kvCache, float baseTopP, float baseRepeatPenatly, float baseTemperature)
@@ -95,7 +109,9 @@ namespace Chatbot
                 }
                 else
                 {
-                    m_seq2seq = new GPT(opts);
+                    var gpt = new GPT(opts);
+                    gpt.KVCacheRemoveWatcher += Ss_KVCacheRemoveWatcher;
+                    m_seq2seq = gpt;
                 }
                 if (String.IsNullOrEmpty(blockedTokens) == false)
                 {
