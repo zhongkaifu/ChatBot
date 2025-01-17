@@ -95,14 +95,8 @@ namespace Chatbot
                 }
 
                 newLine = newLine.Replace("\n", "\n<br>");
-                newLine = newLine.Replace("__ lf1__", " <br>");
-                newLine = newLine.Replace("__ lf2__", " <br><br>");
-                newLine = newLine.Replace("__lf1__", " <br>");
-                newLine = newLine.Replace("__lf2__", " <br><br>");
-                newLine = newLine.Replace("[lf1]", " <br>");
-                newLine = newLine.Replace("[lf2]", " <br><br>");
-                newLine = newLine.Replace("lf1", " <br>");
-                newLine = newLine.Replace("lf2", " <br><br>");
+                newLine = newLine.Replace("[lf1]", "<br>");
+                newLine = newLine.Replace("[lf2]", "<br><br>");
 
 
 
